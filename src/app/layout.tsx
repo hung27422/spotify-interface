@@ -5,6 +5,8 @@ import { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import ProviderSession from "./_app";
 import ContextMusic from "@/context/ContextMusic";
+import Sidebar from "./layout/Sidebar";
+import Player from "./layout/Player";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +20,21 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-     <ContextMusic>
-        <body className={inter.className}>
-          <ProviderSession>{children}</ProviderSession>
-        </body>
-     </ContextMusic>
+      <ContextMusic>
+        <ProviderSession>
+          <body className={inter.className}>
+            <div className="flex height-sidebar">
+              <Sidebar />
+              <div className="border-4 border-purple-900 flex-col flex-grow overflow-hidden">
+                {children}
+              </div>
+            </div>
+            <div>
+              <Player />
+            </div>
+          </body>
+        </ProviderSession>
+      </ContextMusic>
     </html>
   );
 }

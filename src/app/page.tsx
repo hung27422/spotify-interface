@@ -19,7 +19,7 @@ export default function Home() {
   // console.log("contextValueNewReleases", contextValueNewReleases);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="">
       {session?.user && (
         <button
           onClick={() => {
