@@ -4,6 +4,7 @@ import "./globals.css";
 import { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import ProviderSession from "./_app";
+import ContextMusic from "@/context/ContextMusic";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ProviderSession>{children}</ProviderSession>
-      </body>
+     <ContextMusic>
+        <body className={inter.className}>
+          <ProviderSession>{children}</ProviderSession>
+        </body>
+     </ContextMusic>
     </html>
   );
 }

@@ -1,3 +1,4 @@
+import { Session } from "inspector";
 import { User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
@@ -10,4 +11,13 @@ export interface ExtendedToken extends JWT {
   accessTokenExpiresAt: number;
   user: User;
   err?: TokenErr;
+}
+export interface ExtendedSession extends Session {
+  accessToken: ExtendedToken["accessToken"];
+  err: ExtendedToken["err"];
+  user: ExtendedToken["user"];
+  expires: string;
+}
+export interface NewRelease {
+  body: [];
 }
