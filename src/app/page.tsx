@@ -1,4 +1,5 @@
 "use client";
+import AlbumItem from "@/components/AlbumItem";
 import { MusicContext } from "@/context/ContextMusic";
 import useGetNewReleasesSpotify from "@/hooks/useGetNewReleasesSpotify";
 import { signOut, useSession } from "next-auth/react";
@@ -7,29 +8,10 @@ import { use, useContext, useEffect } from "react";
 
 export default function Home() {
   const { data: session } = useSession();
-  // console.log("session", session);
-  // const { contextValueNewReleases, setContextValueNewReleases } =
-  //   useContext(MusicContext);
-  // const { contextValueNewReleases } = useGetNewReleasesSpotify();
-  // useEffect(() => {
-  //   if (contextValueNewReleases) {
-  //     console.log(contextValueNewReleases);
-  //   }
-  // }, [contextValueNewReleases, session]);
-  // console.log("contextValueNewReleases", contextValueNewReleases);
 
   return (
     <main className="">
-      {session?.user && (
-        <button
-          onClick={() => {
-            signOut();
-          }}
-        >
-          LogOut
-        </button>
-      )}
-      <h1 className="text-3xl font-bold underline">Hello world! 1</h1>
+      <AlbumItem />
     </main>
   );
 }

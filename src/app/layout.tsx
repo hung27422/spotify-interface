@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Barlow } from "next/font/google";
 import "./globals.css";
 import { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
@@ -7,8 +7,9 @@ import ProviderSession from "./_app";
 import ContextMusic from "@/context/ContextMusic";
 import Sidebar from "./layout/Sidebar";
 import Player from "./layout/Player";
+import Navbar from "./layout/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const barlow = Barlow({ weight: ["400"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,14 +23,15 @@ export default function RootLayout({
     <html lang="en">
       <ContextMusic>
         <ProviderSession>
-          <body className={inter.className}>
-            <div className="flex height-sidebar">
+          <body className={`${barlow.className} p-2 bg-black`}>
+            <div className="grid grid-cols-4 height-sidebar gap-2 ">
               <Sidebar />
-              <div className="border-4 border-purple-900 flex-col flex-grow overflow-hidden">
+              <div className="flex flex-col flex-grow overflow-hidden col-span-3 bg-[#030222] rounded-xl">
+                <Navbar />
                 {children}
               </div>
             </div>
-            <div>
+            <div className="bg-black">
               <Player />
             </div>
           </body>
