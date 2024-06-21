@@ -4,8 +4,13 @@ import useSWR from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ExtendedSession } from "@/types";
-//Lấy danh sách mới phát hành
-function useGetNewReleasesSpotify() {
+interface UseTestParams {
+  type: string;
+  time_range?: string;
+  limit?: number;
+  offset?: number;
+}
+function useTest() {
   const { data: session } = useSession();
   const fetcher = (url: string) =>
     axios
@@ -16,7 +21,8 @@ function useGetNewReleasesSpotify() {
       })
       .then((res) => res.data);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { data, isLoading } = useSWR(apiUrl + `browse/new-releases`, fetcher, {
+  const queryParams = new URLSearchParams();
+  const { data, isLoading } = useSWR(apiUrl + `albums`, fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -24,4 +30,4 @@ function useGetNewReleasesSpotify() {
   return { data, isLoading };
 }
 
-export default useGetNewReleasesSpotify;
+export default useTest;

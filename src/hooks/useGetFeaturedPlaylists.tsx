@@ -4,8 +4,8 @@ import useSWR from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ExtendedSession } from "@/types";
-//Lấy danh sách mới phát hành
-function useGetNewReleasesSpotify() {
+// Lấy danh sách phổ biến
+function useGetFeaturedPlaylists() {
   const { data: session } = useSession();
   const fetcher = (url: string) =>
     axios
@@ -16,12 +16,18 @@ function useGetNewReleasesSpotify() {
       })
       .then((res) => res.data);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { data, isLoading } = useSWR(apiUrl + `browse/new-releases`, fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { data, isLoading } = useSWR(
+    apiUrl +
+      `browse/featured-playlists
+`,
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
   return { data, isLoading };
 }
 
-export default useGetNewReleasesSpotify;
+export default useGetFeaturedPlaylists;

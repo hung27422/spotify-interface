@@ -12,8 +12,12 @@ function Sidebar() {
   return (
     <div className="col-span-1 h-screen height-sidebar overflow-hidden">
       <div className="flex flex-col items-start  py-2 px-4 bg-sidebar text-white rounded-xl --panel-gap">
-        <IconButton icon={HomeIcon} title="Trang chủ" />
-        <IconButton icon={MagnifyingGlassCircleIcon} title="Tìm kiếm" />
+        <IconButton href="/" icon={HomeIcon} title="Trang chủ" />
+        <IconButton
+          href="pages/search"
+          icon={MagnifyingGlassCircleIcon}
+          title="Tìm kiếm"
+        />
       </div>
       <div className="flex flex-col items-start  py-2 px-4 bg-sidebar text-white rounded-xl height-sidebar-item">
         <header className="flex items-center justify-between w-full">

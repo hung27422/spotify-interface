@@ -6,8 +6,8 @@ function AlbumItem() {
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde sapiente, nulla iusto incidunt similique ut distinctio a ipsam. Dicta perspiciatis inventore et consequuntur pariatur ipsam accusamus dolor exercitationem aperiam officia";
   return (
     <div className="h-64 w-fit p-2 rounded-lg overflow-hidden  hover:bg-primary cursor-pointer group">
-      <div className="w-44 overflow-hidden">
-        <div className="w-44 h-44 overflow-hidden relative ">
+      <div className="w-40 overflow-hidden">
+        <div className="w-40 h-40 overflow-hidden relative ">
           <Image
             src={
               "https://i.scdn.co/image/ab67706f00000002a82e48387739c7169f4b7911"
