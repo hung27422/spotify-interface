@@ -2,28 +2,71 @@
 import useGetPlaylist from "@/hooks/useGetPlaylist";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import iconLogo from "@/assets/images/user.jpg";
 import IconPlayPlaylist from "@/components/IconPlayPlaylist";
-import { EllipsisHorizontalIcon } from "@heroicons/react/16/solid";
+import { ClockIcon, EllipsisHorizontalIcon } from "@heroicons/react/16/solid";
 import Song from "@/components/Song";
+import { MusicContext } from "@/context/ContextMusic";
+import RandomColorHeadingPlaylist from "@/components/RandomColorHeadingPlaylist";
 function PlaylistDetail({ params }: { params: { idPlaylist: string } }) {
   const { data: session } = useSession();
   const { data: playlist } = useGetPlaylist({
     playlist_id: `${params.idPlaylist}`,
   });
-  useEffect(() => {
-    if (playlist) {
-      console.log(playlist);
+  const { setNamePlaylist, setColorHeadingPlaylist } = useContext(MusicContext);
+
+  const [hide, setHide] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { colorRandom } = RandomColorHeadingPlaylist({
+    playlistId: `${playlist?.id}`,
+  });
+
+  const handleScroll = useCallback(() => {
+    if (containerRef.current) {
+      const scrollTop = containerRef.current.scrollTop;
+      if (scrollTop >= 280) {
+        if (playlist && colorRandom) {
+          setNamePlaylist(playlist?.name);
+          setHide(false);
+          setColorHeadingPlaylist(colorRandom?.color);
+        }
+      } else {
+        setHide(true);
+        setNamePlaylist("");
+        setColorHeadingPlaylist("");
+      }
     }
-  }, [playlist]);
+  }, [colorRandom, playlist, setColorHeadingPlaylist, setNamePlaylist]);
+  //Khi cuộn scroll sẽ thực hiện handleScroll để lấy vị trí scrollTop
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [handleScroll]);
+  //Sau khi chuyển trang set tất cả về ban đầu
+  useEffect(() => {
+    setHide(true);
+    setNamePlaylist("");
+    setColorHeadingPlaylist("");
+  }, [params.idPlaylist, setColorHeadingPlaylist, setNamePlaylist]);
   if (!playlist) return null;
   const songs = playlist.tracks.items;
-
   return (
     <>
-      <div className="w-full overflow-y-scroll scrollbar-hidden">
-        <header className="flex items-center bg-gradient-to-b from-red-500 to-page h-80 w-full padding-page">
+      <div
+        ref={containerRef}
+        className="w-full overflow-y-scroll scrollbar-hidden"
+      >
+        <div
+          className={`flex items-center bg-gradient-to-b ${colorRandom?.gradient} to-page h-80 w-full padding-page`}
+        >
           <div>
             <Image
               src={playlist?.images[0].url}
@@ -49,16 +92,35 @@ function PlaylistDetail({ params }: { params: { idPlaylist: string } }) {
               <span>{playlist.tracks.items.length} Bài hát</span>
             </div>
           </div>
-        </header>
+        </div>
         <section className="px-5">
-          <div className="flex items-center">
-            <IconPlayPlaylist />
-            <EllipsisHorizontalIcon className="h-6 w-6 ml-4" />
-          </div>
+          {hide && (
+            <div className="flex items-center">
+              <IconPlayPlaylist size="w-10 h-10" sizeIcon="w-6 h-6" />
+              <EllipsisHorizontalIcon className="h-6 w-6 ml-4" />
+            </div>
+          )}
           <div>
-            {songs.map((song, index) => {
-              return <Song key={index} index={index} data={song} />;
-            })}
+            <div
+              className={`grid grid-cols-5 h-14 items-center border-b border-gray-700 mb-2 ${
+                !hide && "absolute right-5 top-16 left-5 bg-page"
+              }`}
+            >
+              <div className=" flex col-span-2">
+                <span className="w-8 text-center">#</span>
+                <span className="ml-3">Tiêu đề</span>
+              </div>
+              <span className="col-span-1">Album</span>
+              <span className="col-span-1 text-center">Ngày & Giờ thêm</span>
+              <span className="col-span-1 text-center">
+                <ClockIcon className="w-5 h-5 text-center ml-auto mr-auto" />
+              </span>
+            </div>
+            <div className={`${!hide && "mt-28"}`}>
+              {songs.map((song, index) => {
+                return <Song key={index} index={index} data={song} />;
+              })}
+            </div>
           </div>
         </section>
       </div>

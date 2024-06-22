@@ -2,12 +2,16 @@ import { PlayIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
 interface Props {
   classes?: string;
+  size?: string;
+  sizeIcon?: string;
 }
-function IconPlayPlaylist({ classes }: Props) {
+function IconPlayPlaylist({ classes, size, sizeIcon }: Props) {
   return (
     <div className={`animate-bounce ${classes}`}>
-      <div className="flex items-center justify-center w-14 h-14 bg-green-600 rounded-full ">
-        <PlayIcon className="w-8 h-8 ml-1 text-black" />
+      <div
+        className={`flex items-center justify-center bg-green-600 rounded-full ${size}`}
+      >
+        <PlayIcon className={`${sizeIcon} ml-1 text-black`} />
       </div>
     </div>
   );

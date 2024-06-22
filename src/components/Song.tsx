@@ -8,13 +8,13 @@ interface Props {
   index: number;
 }
 function Song({ data, index }: Props) {
-  useEffect(() => {
-    if (data) {
-      console.log("songs", data);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log("songs", data);
+  //   }
+  // }, [data]);
   return (
-    <div className="grid grid-cols-5 h-14 items-center">
+    <div className="grid grid-cols-5 h-14 items-center cursor-pointer rounded-md hover:bg-primary hover:text-white">
       <div className="col-span-2 flex items-center">
         <span className="w-8 text-center">{index + 1}</span>
         <Image
@@ -25,11 +25,11 @@ function Song({ data, index }: Props) {
           className="ml-3 rounded-md"
         />
         <div className="ml-4">
-          <span className="text-lg">{data.track.name}</span>
+          <span className="text-lg font-bold">{data.track.name}</span>
           <div className="flex items-center">
             {data.track.artists.map((artist, index) => (
               <div key={index} className="flex items-center">
-                <p className="mr-2 text-sm text-gray-400">
+                <p className="mr-2 text-sm text-white font-normal">
                   {index === data.track.artists.length - 1
                     ? artist.name
                     : artist.name + ","}
@@ -57,11 +57,10 @@ function formatTimeAgo(dateTime: Date): string {
   const now = new Date();
   const hoursAgo = differenceInHours(now, dateTime);
   const daysAgo = differenceInDays(now, dateTime);
-
   if (hoursAgo < 24) {
-    return `Thêm ${hoursAgo} giờ trước`;
+    return `${hoursAgo} giờ trước`;
   } else {
-    return `Thêm ${daysAgo} ngày trước`;
+    return `${daysAgo} ngày trước`;
   }
 }
 function formatMilliseconds(milliseconds: number): string {

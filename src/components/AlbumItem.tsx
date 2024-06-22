@@ -18,7 +18,11 @@ function AlbumItem() {
             height={180}
             className="w-auto h-auto rounded-md"
           />
-          <IconPlayPlaylist classes="absolute bottom-0 right-1 hidden group-hover: block" />
+          <IconPlayPlaylist
+            size="w-14 h-14"
+            sizeIcon="w-8 h-8"
+            classes="absolute bottom-0 right-1 hidden group-hover:block"
+          />
         </div>
         <span className="block text-lg font-bold mt-2">Thiên hạ nghe gì</span>
         <p>{truncateText(text, 4)}</p>

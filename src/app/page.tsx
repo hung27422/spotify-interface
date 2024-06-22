@@ -18,7 +18,7 @@ export default function Home() {
   }, [dataNRL]);
 
   return (
-    <main className="mt-16">
+    <main className="">
       <AlbumItem />
     </main>
   );

@@ -6,19 +6,28 @@ interface Props {
   children: React.ReactNode;
 }
 interface MusicContextType {
-  contextValueNewReleases: NewRelease[];
-  setContextValueNewReleases: React.Dispatch<React.SetStateAction<any[]>>;
+  namePlaylist: string;
+  setNamePlaylist: React.Dispatch<React.SetStateAction<string>>;
+  colorHeadingPlaylist: string;
+  setColorHeadingPlaylist: React.Dispatch<React.SetStateAction<string>>;
 }
 const defaultValue: MusicContextType = {
-  contextValueNewReleases: [],
-  setContextValueNewReleases: () => {},
+  namePlaylist: "",
+  setNamePlaylist: () => {},
+  colorHeadingPlaylist: "",
+  setColorHeadingPlaylist: () => {},
 };
 export const MusicContext = createContext<MusicContextType>(defaultValue);
 function ContextMusic({ children }: Props) {
-  const [contextValueNewReleases, setContextValueNewReleases] = useState<any>(
-    []
-  );
-  const contextValue = { contextValueNewReleases, setContextValueNewReleases };
+  const [namePlaylist, setNamePlaylist] = useState<string>("");
+  const [colorHeadingPlaylist, setColorHeadingPlaylist] = useState<string>("");
+  const contextValue = {
+    namePlaylist,
+    setNamePlaylist,
+    colorHeadingPlaylist,
+    setColorHeadingPlaylist,
+  };
+
   return (
     <MusicContext.Provider value={contextValue}>
       {children}
