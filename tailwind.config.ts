@@ -18,6 +18,7 @@ const config: Config = {
         primary: "#ff526d",
         black: "#000",
         sidebar: "#111131",
+        page: "#030222",
       },
     },
   },

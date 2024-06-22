@@ -14,7 +14,7 @@ function Sidebar() {
       <div className="flex flex-col items-start  py-2 px-4 bg-sidebar text-white rounded-xl --panel-gap">
         <IconButton href="/" icon={HomeIcon} title="Trang chủ" />
         <IconButton
-          href="pages/search"
+          href="/pages/search"
           icon={MagnifyingGlassCircleIcon}
           title="Tìm kiếm"
         />

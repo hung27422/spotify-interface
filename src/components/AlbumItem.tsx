@@ -1,5 +1,6 @@
 import { PlayIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
+import IconPlayPlaylist from "./IconPlayPlaylist";
 
 function AlbumItem() {
   const text =
@@ -17,11 +18,7 @@ function AlbumItem() {
             height={180}
             className="w-auto h-auto rounded-md"
           />
-          <div className="absolute bottom-0 right-1 hidden group-hover:block animate-bounce">
-            <div className="flex items-center justify-center w-14 h-14 bg-green-600 rounded-full ">
-              <PlayIcon className="w-8 h-8 ml-1 text-black" />
-            </div>
-          </div>
+          <IconPlayPlaylist classes="absolute bottom-0 right-1 hidden group-hover: block" />
         </div>
         <span className="block text-lg font-bold mt-2">Thiên hạ nghe gì</span>
         <p>{truncateText(text, 4)}</p>

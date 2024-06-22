@@ -26,7 +26,7 @@ export default function RootLayout({
           <body className={`${barlow.className} p-2 bg-black`}>
             <div className="grid grid-cols-4 height-sidebar gap-2 ">
               <Sidebar />
-              <div className="flex flex-col flex-grow overflow-hidden col-span-3 bg-[#030222] rounded-xl">
+              <div className="flex flex-col flex-grow relative overflow-hidden col-span-3 bg-page rounded-xl">
                 <Navbar />
                 {children}
               </div>

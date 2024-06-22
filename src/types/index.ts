@@ -21,3 +21,60 @@ export interface ExtendedSession extends Session {
 export interface NewRelease {
   body: [];
 }
+
+export interface Artists {
+  id: string;
+  name: string;
+  type: string;
+}
+export interface Album {
+  album_type: string;
+  artist: Artists[];
+  images: [
+    {
+      url: string;
+    },
+    {
+      url: string;
+    },
+    {
+      url: string;
+    }
+  ];
+  name: string;
+  release_date: string;
+  type: string;
+}
+export interface Song {
+  added_at: string;
+  track: {
+    idSong: string;
+    name: string;
+    type: string;
+    artists: Artists[];
+    album: Album;
+    duration_ms: number;
+  };
+}
+export interface PlaylistOfUser {
+  id: string;
+  name: string;
+  owner: {
+    display_name: string;
+    id_owner: string;
+  };
+  images: [
+    {
+      url: string;
+    }
+  ];
+}
+export interface PlaylistDetails {
+  id: PlaylistOfUser["id"];
+  name: PlaylistOfUser["name"];
+  owner: PlaylistOfUser["owner"];
+  images: PlaylistOfUser["images"];
+  tracks: {
+    items: Song[];
+  };
+}

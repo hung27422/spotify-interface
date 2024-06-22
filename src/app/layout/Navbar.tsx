@@ -4,7 +4,7 @@ import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/16/solid";
 
 function Navbar() {
   return (
-    <div className="flex items-center justify-between h-16 ">
+    <div className="flex items-center absolute top-0 left-0 right-[12px] justify-between h-16 ">
       <div className="flex items-center ">
         <ChevronLeftIcon className="w-8 h-8" />
         <ChevronRightIcon className="w-8 h-8" />

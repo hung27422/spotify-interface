@@ -8,19 +8,23 @@
   body {
     @apply text-white;
   }
+  h1 {
+    @apply text-4xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
 }
 @layer components {
-  .hover-animate {
-    @apply absolute bottom-0 right-0 hidden;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    transform: translateY(10px);
-    opacity: 0;
+  .padding-page {
+    @apply pt-16 px-5;
   }
-
-  .group:hover .hover-animate {
-    @apply block;
-    transform: translateY(0);
-    opacity: 1;
+  .scrollbar-hidden {
+    -ms-overflow-style: none; /* IE 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none; /* WebKit */
   }
 }
 
@@ -32,4 +36,13 @@
 }
 .--panel-gap {
   margin-bottom: 8px;
+}
+html {
+  overflow: -moz-scrollbars-none;
+  -ms-overflow-style: none;
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* WebKit */
 }

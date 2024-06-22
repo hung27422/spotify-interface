@@ -3,14 +3,11 @@ import { useContext } from "react";
 import useSWR from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { ExtendedSession } from "@/types";
+import { ExtendedSession, PlaylistDetails } from "@/types";
 interface UseTestParams {
-  type: string;
-  time_range?: string;
-  limit?: number;
-  offset?: number;
+  playlist_id: string;
 }
-function useTest() {
+function useGetPlaylist({ playlist_id }: UseTestParams) {
   const { data: session } = useSession();
   const fetcher = (url: string) =>
     axios
@@ -21,13 +18,16 @@ function useTest() {
       })
       .then((res) => res.data);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const queryParams = new URLSearchParams();
-  const { data, isLoading } = useSWR(apiUrl + `me/playlists`, fetcher, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+  const { data, isLoading } = useSWR<PlaylistDetails>(
+    apiUrl + `playlists/${playlist_id}`,
+    fetcher,
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
+  );
   return { data, isLoading };
 }
 
-export default useTest;
+export default useGetPlaylist;

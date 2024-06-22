@@ -4,13 +4,8 @@ import useSWR from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ExtendedSession } from "@/types";
-interface UseTestParams {
-  type: string;
-  time_range?: string;
-  limit?: number;
-  offset?: number;
-}
-function useTest() {
+//Lấy ra playlist của người dùng đang login
+function useGetCurrentPlaylistOfUser() {
   const { data: session } = useSession();
   const fetcher = (url: string) =>
     axios
@@ -21,7 +16,6 @@ function useTest() {
       })
       .then((res) => res.data);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const queryParams = new URLSearchParams();
   const { data, isLoading } = useSWR(apiUrl + `me/playlists`, fetcher, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
@@ -30,4 +24,4 @@ function useTest() {
   return { data, isLoading };
 }
 
-export default useTest;
+export default useGetCurrentPlaylistOfUser;
