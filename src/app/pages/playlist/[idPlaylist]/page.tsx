@@ -102,7 +102,7 @@ function PlaylistDetail({ params }: { params: { idPlaylist: string } }) {
           )}
           <div>
             <div
-              className={`grid grid-cols-5 h-14 items-center border-b border-gray-700 mb-2 ${
+              className={`grid grid-cols-5 h-14 items-center border-b border-gray-700 select-none mb-2 ${
                 !hide && "absolute right-5 top-16 left-5 bg-page"
               }`}
             >

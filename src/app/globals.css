@@ -26,6 +26,15 @@
   .scrollbar-hidden::-webkit-scrollbar {
     display: none; /* WebKit */
   }
+  .hover-hidden {
+    @apply group-hover:hidden;
+  }
+  .hover-show {
+    @apply group-hover:block;
+  }
+  .icon-player {
+    @apply w-10 h-10 mx-2 p-2 hover:bg-primary rounded-full;
+  }
 }
 
 .height-sidebar {
@@ -45,4 +54,7 @@ html {
 
 html::-webkit-scrollbar {
   display: none; /* WebKit */
+}
+input[type="range"] {
+  accent-color: #ff516d;
 }

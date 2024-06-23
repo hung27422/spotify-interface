@@ -1,22 +1,48 @@
 "use client";
 import { Song as SongType } from "@/types";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { differenceInHours, differenceInDays } from "date-fns";
+import { PlayIcon } from "@heroicons/react/16/solid";
+import { MusicContext } from "@/context/ContextMusic";
+import useGetTrack from "@/hooks/useGetTrack";
+import useGetPlaybackState from "@/hooks/useGetPlaybackState";
+import useGetCurrentPlaylistOfUser from "@/hooks/useGetCurrentPlaylistOfUser";
+import useGetCurrentlyPlayingTrack from "@/hooks/useGetCurrentlyPlayingTrack";
+import useSpotify from "@/hooks/useSpotify";
+import usePlayTrack from "@/hooks/usePlayTrack";
 interface Props {
   data: SongType;
   index: number;
+  player?: boolean;
 }
-function Song({ data, index }: Props) {
+function Song({ data, index, player }: Props) {
+  const { setIdTrackContext } = useContext(MusicContext);
+  // const { data: dataTrack } = useGetTrack();
+  const { data: dataPlayback } = useGetPlaybackState();
+  const { data: dataCurrentPlaying } = useGetCurrentlyPlayingTrack();
+  const { spotifyApi } = useSpotify();
+  const { playTrack } = usePlayTrack();
+
   // useEffect(() => {
-  //   if (data) {
-  //     console.log("songs", data);
+  //   if (dataCurrentPlaying) {
+  //     console.log("dataCurrentPlaying", dataCurrentPlaying);
   //   }
-  // }, [data]);
+  // }, [dataCurrentPlaying]);
+  const handlePlayPause = async () => {
+    playTrack("spotify:track:5U30iZBlmxkpHqzb1OSnBS");
+  };
+  if (!data) return null;
   return (
-    <div className="grid grid-cols-5 h-14 items-center cursor-pointer rounded-md hover:bg-primary hover:text-white">
+    <div className="grid grid-cols-5 h-14 items-center cursor-pointer rounded-md hover:bg-primary hover:text-white group">
       <div className="col-span-2 flex items-center">
-        <span className="w-8 text-center">{index + 1}</span>
+        <span className="w-8 text-center hover-hidden">{index + 1}</span>
+        <div
+          onClick={() => handlePlayPause()}
+          className=" w-8 hidden hover-show "
+        >
+          <PlayIcon className="w-5 h-5 ml-auto mr-auto" />
+        </div>
         <Image
           src={data.track.album.images[2].url}
           alt="img-song"
@@ -39,13 +65,17 @@ function Song({ data, index }: Props) {
           </div>
         </div>
       </div>
-      <div className="col-span-1">
+      <div className={`col-span-1 ${player && "hidden"}`}>
         <span className="text-gray-300">{data.track.album.name}</span>
       </div>
-      <div className="col-span-1 text-center text-gray-300">
+      <div
+        className={`col-span-1 text-center text-gray-300 ${player && "hidden"}`}
+      >
         {formatTimeAgo(new Date(data.added_at))}
       </div>
-      <div className="col-span-1 text-center text-gray-300">
+      <div
+        className={`col-span-1 text-center text-gray-300 ${player && "hidden"}`}
+      >
         <span>{formatMilliseconds(data.track.duration_ms)}</span>
       </div>
     </div>
@@ -65,7 +95,6 @@ function formatTimeAgo(dateTime: Date): string {
 }
 function formatMilliseconds(milliseconds: number): string {
   const seconds = Math.floor(milliseconds / 1000);
-  const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const remainingSeconds = seconds % 60;
 

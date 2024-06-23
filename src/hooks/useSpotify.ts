@@ -13,7 +13,7 @@ function useSpotify() {
     }
     spotifyApi.setAccessToken((session as ExtendedSession).accessToken);
   }, [session]);
-  return spotifyApi;
+  return { spotifyApi };
 }
 
 export default useSpotify;

@@ -48,12 +48,34 @@ export interface Album {
 export interface Song {
   added_at: string;
   track: {
-    idSong: string;
+    id: string;
     name: string;
     type: string;
     artists: Artists[];
     album: Album;
     duration_ms: number;
+  };
+  item: {
+    id: string;
+    name: string;
+    type: string;
+    artists: Artists[];
+    album: Album;
+    duration_ms: number;
+  };
+}
+export interface SongCurrentOfUser {
+  item: {
+    id: string;
+    name: string;
+    type: string;
+    artists: Artists[];
+    album: Album;
+    duration_ms: number;
+  };
+  context: {
+    type: string;
+    uri: string;
   };
 }
 export interface PlaylistOfUser {
