@@ -99,9 +99,6 @@ function Player() {
           />
           <ArrowPathRoundedSquareIcon className="icon-player " />
         </div>
-        <div>
-          <input type="range" min={0} max={100} className="w-96" />
-        </div>
       </div>
       <div className="col-span-1 items-center">
         <div className="flex items-center justify-end mr-4">
