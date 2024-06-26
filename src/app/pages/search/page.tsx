@@ -1,7 +1,6 @@
 "use client";
 import { MusicContext } from "@/context/ContextMusic";
 import useGetCurrentlyPlayingTrack from "@/hooks/useGetCurrentlyPlayingTrack";
-import useGetNewReleasesSpotify from "@/hooks/useGetNewReleasesSpotify";
 import useTest from "@/hooks/useTest";
 import { useContext, useEffect, useMemo } from "react";
 
