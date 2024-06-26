@@ -1,33 +1,28 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { ExtendedSession, PlaylistDetails } from "@/types";
+import useSpotify from "./useSpotify";
 interface UseTestParams {
   playlist_id: string;
 }
 function useGetPlaylist({ playlist_id }: UseTestParams) {
+  const { spotifyApi } = useSpotify();
   const { data: session } = useSession();
-  const fetcher = (url: string) =>
-    axios
-      .get(url, {
-        headers: {
-          Authorization: "Bearer " + (session as ExtendedSession).accessToken,
-        },
-      })
-      .then((res) => res.data);
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const { data, isLoading } = useSWR<PlaylistDetails>(
-    apiUrl + `playlists/${playlist_id}`,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+  const [playlist, setPlaylist] = useState<PlaylistDetails>();
+  useEffect(() => {
+    const getPlaylistUser = async () => {
+      const playlistInfo = await spotifyApi.getPlaylist(playlist_id);
+      if (!playlistInfo.body) return null;
+      setPlaylist(playlistInfo.body);
+    };
+    if (spotifyApi.getAccessToken()) {
+      getPlaylistUser();
     }
-  );
-  return { data, isLoading };
+  }, [spotifyApi, session, playlist_id]);
+  return { playlist };
 }
 
 export default useGetPlaylist;

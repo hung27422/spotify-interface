@@ -1,6 +1,7 @@
 import { Session } from "inspector";
 import { User } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import { Dispatch } from "react";
 
 export enum TokenErr {
   refreshTokenErr = "refreshTokenErr",
@@ -44,6 +45,7 @@ export interface Album {
   name: string;
   release_date: string;
   type: string;
+  uri: string;
 }
 export interface Song {
   added_at: string;
@@ -54,14 +56,7 @@ export interface Song {
     artists: Artists[];
     album: Album;
     duration_ms: number;
-  };
-  item: {
-    id: string;
-    name: string;
-    type: string;
-    artists: Artists[];
-    album: Album;
-    duration_ms: number;
+    uri: string;
   };
 }
 export interface SongCurrentOfUser {
@@ -72,7 +67,9 @@ export interface SongCurrentOfUser {
     artists: Artists[];
     album: Album;
     duration_ms: number;
+    uri: string;
   };
+  is_playing: boolean;
   context: {
     type: string;
     uri: string;
@@ -100,3 +97,53 @@ export interface PlaylistDetails {
     items: Song[];
   };
 }
+export interface Device {
+  devices: [
+    {
+      id: string[];
+      name: string;
+      type: string;
+      volume_percent: number;
+    }
+  ];
+}
+export interface SongContextState {
+  selectedSongId?: string;
+  selectedSong: SongCurrentOfUser | null;
+  isPlaying: boolean;
+  volume: number;
+  deviceId: string | null;
+}
+
+export interface ISongContext {
+  songContextState: SongContextState;
+  dispatchSongAction: Dispatch<SongReducerAction>;
+}
+
+export enum SongReducerActionType {
+  SetDevice = "SetDevice",
+  ToggleIsPlaying = "ToggleIsPlaying",
+  SetCurrentPlayingSong = "SetCurrentPlayingSong",
+  SetVolume = "SetVolume",
+}
+
+export type SongReducerAction =
+  | {
+      type: SongReducerActionType.SetDevice;
+      payload: Pick<SongContextState, "deviceId" | "volume">;
+    }
+  | {
+      type: SongReducerActionType.ToggleIsPlaying;
+      payload: boolean;
+    }
+  | {
+      type: SongReducerActionType.SetCurrentPlayingSong;
+      payload: Pick<
+        SongContextState,
+        "selectedSongId" | "selectedSong" | "isPlaying"
+      >;
+    }
+  | {
+      type: SongReducerActionType.SetVolume;
+      payload: number;
+    };

@@ -33,7 +33,7 @@
     @apply group-hover:block;
   }
   .icon-player {
-    @apply w-10 h-10 mx-2 p-2 hover:bg-primary rounded-full;
+    @apply w-10 h-10 mx-2 p-2 hover:text-primary rounded-full cursor-pointer;
   }
 }
 

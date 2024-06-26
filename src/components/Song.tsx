@@ -1,47 +1,69 @@
 "use client";
-import { Song as SongType } from "@/types";
+import { SongCurrentOfUser, Song as SongType } from "@/types";
 import Image from "next/image";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { differenceInHours, differenceInDays } from "date-fns";
-import { PlayIcon } from "@heroicons/react/16/solid";
-import { MusicContext } from "@/context/ContextMusic";
-import useGetTrack from "@/hooks/useGetTrack";
-import useGetPlaybackState from "@/hooks/useGetPlaybackState";
-import useGetCurrentPlaylistOfUser from "@/hooks/useGetCurrentPlaylistOfUser";
+import { PauseIcon, PlayIcon } from "@heroicons/react/16/solid";
 import useGetCurrentlyPlayingTrack from "@/hooks/useGetCurrentlyPlayingTrack";
 import useSpotify from "@/hooks/useSpotify";
-import usePlayTrack from "@/hooks/usePlayTrack";
+import { MusicContext } from "@/context/ContextMusic";
 interface Props {
   data: SongType;
   index: number;
   player?: boolean;
 }
 function Song({ data, index, player }: Props) {
-  const { setIdTrackContext } = useContext(MusicContext);
-  // const { data: dataTrack } = useGetTrack();
-  const { data: dataPlayback } = useGetPlaybackState();
-  const { data: dataCurrentPlaying } = useGetCurrentlyPlayingTrack();
+  const { currentSong } = useGetCurrentlyPlayingTrack();
   const { spotifyApi } = useSpotify();
-  const { playTrack } = usePlayTrack();
+  const { deviceId, playerState, setPlayerState, setIdTrack } =
+    useContext(MusicContext);
 
-  // useEffect(() => {
-  //   if (dataCurrentPlaying) {
-  //     console.log("dataCurrentPlaying", dataCurrentPlaying);
-  //   }
-  // }, [dataCurrentPlaying]);
-  const handlePlayPause = async () => {
-    playTrack("spotify:track:5U30iZBlmxkpHqzb1OSnBS");
+  const handlePlayPause = (uri: string, uriAlbum: string) => {
+    if (!deviceId) return null;
+    if (data.track.id === currentSong?.item.id) {
+      spotifyApi.pause();
+      setPlayerState(true);
+    } else {
+      spotifyApi.play({
+        device_id: deviceId,
+        context_uri: uriAlbum,
+        offset: {
+          uri: uri as string,
+        },
+      });
+
+      setPlayerState(false);
+      setIdTrack(uri);
+    }
   };
   if (!data) return null;
+  if (!currentSong) return null;
   return (
-    <div className="grid grid-cols-5 h-14 items-center cursor-pointer rounded-md hover:bg-primary hover:text-white group">
+    <div
+      className={`grid grid-cols-5 h-14 items-center cursor-pointer rounded-md hover:bg-primary hover:text-white group`}
+    >
       <div className="col-span-2 flex items-center">
-        <span className="w-8 text-center hover-hidden">{index + 1}</span>
+        {data.track.id === currentSong?.item?.id && !playerState ? (
+          <Image
+            src="https://zmp3-static.zmdcdn.me/skins/zmp3-v6.1/images/icons/icon-playing.gif"
+            alt="icon-play"
+            width={20}
+            height={20}
+            className="w-5 h-5 text-center hover-hidden"
+          ></Image>
+        ) : (
+          <span className="w-5 text-center hover-hidden">{index + 1}</span>
+        )}
+
         <div
-          onClick={() => handlePlayPause()}
+          onClick={() => handlePlayPause(data.track.uri, data.track.album.uri)}
           className=" w-8 hidden hover-show "
         >
-          <PlayIcon className="w-5 h-5 ml-auto mr-auto" />
+          {data.track.id === currentSong?.item.id && !playerState ? (
+            <PauseIcon className="w-5 h-5 ml-auto mr-auto" />
+          ) : (
+            <PlayIcon className="w-5 h-5 ml-auto mr-auto" />
+          )}
         </div>
         <Image
           src={data.track.album.images[2].url}
@@ -51,7 +73,14 @@ function Song({ data, index, player }: Props) {
           className="ml-3 rounded-md"
         />
         <div className="ml-4">
-          <span className="text-lg font-bold">{data.track.name}</span>
+          <span
+            className={`text-lg font-bold ${
+              data.track.id === currentSong?.item.id &&
+              "text-primary group-hover:text-white"
+            }`}
+          >
+            {data.track.name}
+          </span>
           <div className="flex items-center">
             {data.track.artists.map((artist, index) => (
               <div key={index} className="flex items-center">

@@ -1,7 +1,6 @@
 import { scopes, spotifyApi } from "@/config/spotify";
 import { ExtendedToken, TokenErr } from "@/types";
-import { time } from "console";
-import NextAuth, { CallbacksOptions, User } from "next-auth";
+import NextAuth, { CallbacksOptions } from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
 interface CustomSession {
   user: {

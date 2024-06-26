@@ -11,7 +11,7 @@ import { MusicContext } from "@/context/ContextMusic";
 import RandomColorHeadingPlaylist from "@/components/RandomColorHeadingPlaylist";
 function PlaylistDetail({ params }: { params: { idPlaylist: string } }) {
   const { data: session } = useSession();
-  const { data: playlist } = useGetPlaylist({
+  const { playlist } = useGetPlaylist({
     playlist_id: `${params.idPlaylist}`,
   });
   const { setNamePlaylist, setColorHeadingPlaylist } = useContext(MusicContext);
@@ -107,7 +107,7 @@ function PlaylistDetail({ params }: { params: { idPlaylist: string } }) {
               }`}
             >
               <div className=" flex col-span-2">
-                <span className="w-8 text-center">#</span>
+                <span className="w-5 text-center">#</span>
                 <span className="ml-3">Tiêu đề</span>
               </div>
               <span className="col-span-1">Album</span>

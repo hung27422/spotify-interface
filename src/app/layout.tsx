@@ -21,8 +21,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <ContextMusic>
-        <ProviderSession>
+      <ProviderSession>
+        <ContextMusic>
           <body className={`${barlow.className} p-2 bg-black`}>
             <div className="grid grid-cols-4 height-sidebar gap-2 ">
               <Sidebar />
@@ -35,8 +35,8 @@ export default function RootLayout({
               <Player />
             </div>
           </body>
-        </ProviderSession>
-      </ContextMusic>
+        </ContextMusic>
+      </ProviderSession>
     </html>
   );
 }

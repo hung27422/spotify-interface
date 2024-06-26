@@ -1,15 +1,22 @@
 "use client";
+import { MusicContext } from "@/context/ContextMusic";
+import useGetCurrentlyPlayingTrack from "@/hooks/useGetCurrentlyPlayingTrack";
 import useGetNewReleasesSpotify from "@/hooks/useGetNewReleasesSpotify";
 import useTest from "@/hooks/useTest";
-import { useEffect } from "react";
+import { useContext, useEffect, useMemo } from "react";
 
 function SearchPage() {
   const { data } = useTest();
+  const { currentSong } = useGetCurrentlyPlayingTrack();
+  const { deviceId, setDeviceID } = useContext(MusicContext);
   useEffect(() => {
-    if (data) {
-      console.log("albums", data);
+    if (currentSong) {
+      console.log("currentSong", currentSong);
     }
-  }, [data]);
+    if (deviceId) {
+      console.log("deviceId", deviceId);
+    }
+  }, [currentSong, deviceId]);
   return <div>PageSearch</div>;
 }
 

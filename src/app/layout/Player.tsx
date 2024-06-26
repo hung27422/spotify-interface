@@ -1,24 +1,52 @@
 "use client";
-import Song from "@/components/Song";
+import { MusicContext } from "@/context/ContextMusic";
 import useGetCurrentlyPlayingTrack from "@/hooks/useGetCurrentlyPlayingTrack";
 import {
   ArrowPathRoundedSquareIcon,
   ArrowsRightLeftIcon,
   BackwardIcon,
   ForwardIcon,
-  MicrophoneIcon,
+  PauseIcon,
   PlayIcon,
   SpeakerWaveIcon,
 } from "@heroicons/react/16/solid";
-import { Micro_5 } from "next/font/google";
 import Image from "next/image";
+import { mutate } from "swr";
+
+import { useContext, useState } from "react";
+import { url } from "inspector";
+import useSpotify from "@/hooks/useSpotify";
+import { SongCurrentOfUser, SongReducerActionType } from "@/types";
 // Lấy trạng thái bài nhạc
 function Player() {
-  const { data: dataCurrentPlaying } = useGetCurrentlyPlayingTrack();
-  if (!dataCurrentPlaying) return null;
-  const images = dataCurrentPlaying?.item.album.images;
-  const nameSong = dataCurrentPlaying?.item.name;
-  const artists = dataCurrentPlaying?.item.artists;
+  const { currentSong } = useGetCurrentlyPlayingTrack();
+  const { spotifyApi } = useSpotify();
+  const { playerState, setIdTrack, idTrack } = useContext(MusicContext);
+  const [queue, setQueue] = useState<string[]>([]);
+  if (!currentSong) return null;
+  const images = currentSong?.item.album.images;
+  const nameSong = currentSong?.item.name;
+  const artists = currentSong?.item.artists;
+  const handlePlayPauseTrackSong = async () => {
+    const response = await spotifyApi.getMyCurrentPlayingTrack();
+    if (!response.body) return null;
+    if (response.body.is_playing) {
+      await spotifyApi.pause();
+    } else {
+      await spotifyApi.play();
+      setIdTrack(currentSong.item.id);
+    }
+  };
+  const handleSkipPreviousTrack = async (type: string) => {
+    if (type === "next") {
+      await spotifyApi.skipToNext();
+    } else if (type === "previous") {
+      await spotifyApi.skipToPrevious();
+    }
+    const songInfo = await spotifyApi.getMyCurrentPlayingTrack();
+    if (!songInfo.body) return null;
+    setIdTrack(songInfo.body.item.id);
+  };
   return (
     <div className="border-2 border-black h-[72px] grid grid-cols-4 items-center">
       <div className="col-span-1 flex items-center  ">
@@ -49,10 +77,27 @@ function Player() {
       <div className="flex flex-col col-span-2 items-center">
         <div className="flex items-center justify-center">
           <ArrowsRightLeftIcon className="icon-player" />
-          <BackwardIcon className="icon-player" />
-          <PlayIcon className="icon-player" />
-          <ForwardIcon className="icon-player" />
-          <ArrowPathRoundedSquareIcon className="icon-player" />
+          <BackwardIcon
+            onClick={() => handleSkipPreviousTrack("previous")}
+            className="icon-player"
+          />
+          {!currentSong.is_playing ? (
+            <PlayIcon
+              onClick={() => handlePlayPauseTrackSong()}
+              className={`icon-player bg-primary hover:text-white`}
+            />
+          ) : (
+            <PauseIcon
+              onClick={() => handlePlayPauseTrackSong()}
+              className="icon-player bg-primary hover:text-white"
+            />
+          )}
+
+          <ForwardIcon
+            onClick={() => handleSkipPreviousTrack("next")}
+            className="icon-player"
+          />
+          <ArrowPathRoundedSquareIcon className="icon-player " />
         </div>
         <div>
           <input type="range" min={0} max={100} className="w-96" />
